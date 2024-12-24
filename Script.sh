@@ -2,7 +2,7 @@
 
 # Nombre del contenedor y proyecto
 CONTAINER_NAME="catacumbasdeldev-easy_web:latest"
-PROJECT_ID="Aqui va el ID de tu proyecto de Google Cloud"
+PROJECT_ID="ElIDdeTuProyecto"
 
 while true; do
     # Obtener los puertos de los contenedores que están usando la imagen catacumbasdeldev-easy_web:latest
@@ -11,7 +11,7 @@ while true; do
     if [[ -z "$CONTAINER_PORTS" ]]; then
         echo "No se encontró un contenedor en ejecución con la imagen $CONTAINER_NAME"
     else
-        # Para cada puerto detectado, verifica si existe la regla de firewall 
+        # Para cada puerto detectado, verifica si existe la regla de firewall
         for CONTAINER_PORT in $CONTAINER_PORTS; do
             echo "Puerto detectado: $CONTAINER_PORT"
 
@@ -36,6 +36,24 @@ while true; do
             fi
         done
     fi
+
+    # Eliminar las reglas de firewall que no están siendo usadas
+    # Obtener todos los números de puerto de las reglas de firewall existentes
+    EXISING_RULES=$(gcloud compute firewall-rules list --project="$PROJECT_ID" --filter="name=catacumbadeldev" --format="json")
+
+    for RULE in $(echo "$EXISING_RULES" | jq -r '.[] | .name'); do
+        # Extraer el puerto de la regla
+        RULE_PORT=$(echo "$EXISING_RULES" | jq -r ".[] | select(.name==\"$RULE\") | .allowed[].ports[]")
+
+        # Verificar si este puerto está en uso por algún contenedor
+        PORT_IN_USE=$(echo "$CONTAINER_PORTS" | grep -w "$RULE_PORT")
+
+        # Si el puerto no está en uso, eliminar la regla de firewall
+        if [[ -z "$PORT_IN_USE" ]]; then
+            echo "La regla de firewall $RULE para el puerto $RULE_PORT no está en uso. Eliminándola..."
+            gcloud compute firewall-rules delete "$RULE" --project="$PROJECT_ID" --quiet
+        fi
+    done
 
     # Espera 20 segundos antes de volver a ejecutar
     sleep 20
