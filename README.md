@@ -6,23 +6,31 @@ For the less attentive, the purpose of this repository is to work on and explain
 Attached is the link to TheFlash2k's repository: [https://github.com/TheFlash2k/containers](https://github.com/TheFlash2k/containers).
 
 And of course, here is the link to the CTFd repository as well: [https://github.com/CTFd/CTFd](https://github.com/CTFd/CTFd).
+Aquí tienes una versión actualizada del README con los detalles que mencionas, incluyendo los requisitos de instalación para que el script funcione sin problemas:
+
+---
 
 # Script.sh
+
 Este script tiene como objetivo principal crear una regla de firewall para cada puerto generado por el contenedor del reto. La imagen diseñada para el reto genera puertos dinámicos a medida que el contenedor se levanta, y el script asegura que una regla de firewall se cree para permitir el acceso del competidor a cada puerto asignado por el contenedor.
 
-Descripción de Funcionamiento Actual
+## Descripción de Funcionamiento Actual
 
-El script identifica los puertos que el contenedor expone y, para cada uno de ellos, crea una regla de firewall en Google Cloud, permitiendo el acceso a los puertos generados por el contenedor. En su implementación actual, el script está diseñado para funcionar con puertos asignados por defecto (4444/tcp), pero también detecta los puertos generados dinámicamente y los registra en las reglas de firewall. 
+El script identifica los puertos que el contenedor expone y, para cada uno de ellos, crea una regla de firewall en Google Cloud, permitiendo el acceso a los puertos generados por el contenedor. En su implementación actual, el script está diseñado para funcionar con puertos asignados por defecto (4444/tcp), pero también detecta los puertos generados dinámicamente y los registra en las reglas de firewall.
 
-Áreas de Mejora y Puntos Pendientes
+### Funcionalidades añadidas
+
+1. **Gestión de puertos dinámicos**: El script detecta puertos dinámicos generados por el contenedor y crea reglas de firewall para ellos.
+2. **Eliminación de reglas huérfanas**: Si un contenedor se detiene o elimina, el script también elimina las reglas de firewall correspondientes para los puertos que ya no están siendo utilizados.
+
+## Áreas de Mejora y Puntos Pendientes
 
 Es importante señalar que aún existen algunos detalles pendientes por mejorar en el script:
 
-Gestión de puertos por defecto: Actualmente, el script levanta una regla de firewall para el puerto por defecto (4444), aun que ya gestiona los puertos es importante que ignore el puerto defualt del contenedor, lo que se ajustará en futuras versiones.
-Reglas de firewall persistentes: El script no elimina automáticamente las reglas de firewall cuando un contenedor asociado muere. Esta es otra área que se encuentra en desarrollo, y se implementará en una versión futura del script para asegurar que las reglas de firewall no queden huérfanas de contenedores activos.
+1. **Gestión de puertos por defecto**: Actualmente, el script levanta una regla de firewall para el puerto por defecto (4444). Aunque ya gestiona los puertos dinámicos, es importante que ignore este puerto por defecto en futuras versiones.
+2. **Reglas de firewall persistentes**: El script actualmente elimina las reglas de firewall solo cuando un contenedor asociado se elimina. Este comportamiento será más robusto en versiones futuras para asegurarse de que las reglas huérfanas no permanezcan.
 
-
-Aquí tienes un ejemplo de cómo podrías redactar el archivo README para que sea claro y fácil de seguir:
+---
 
 ## Requisitos Previos
 
@@ -34,14 +42,34 @@ Para usar este script, es necesario contar con los siguientes permisos:
 2. **Ser Administrador de Red de Compute (Compute Network Admin).**
    - Este rol es necesario para gestionar las reglas de firewall dentro del proyecto.
 
-   Si no estás familiarizado con los permisos en Google Cloud, te recomendamos leer la documentación sobre [IAM (Identity and Access Management)](https://cloud.google.com/iam) para comprender cómo asignar estos roles y permisos.
-3. **Logeate en la VM, si es que es necesario.**
+Si no estás familiarizado con los permisos en Google Cloud, te recomendamos leer la documentación sobre [IAM (Identity and Access Management)](https://cloud.google.com/iam) para comprender cómo asignar estos roles y permisos.
+
+3. **Instalar Docker en la VM.**
+   - Asegúrate de tener Docker instalado y funcionando en la máquina virtual donde ejecutarás el script.
+   
+4. **Instalar las herramientas necesarias:**
+
+   Antes de ejecutar el script, necesitarás tener instalados ciertos paquetes en tu sistema, especialmente `jq` para procesar la salida de las reglas de firewall en formato JSON. Para instalar `jq`:
+
+   **En sistemas Debian/Ubuntu**:
    ```bash
-   gcloud auth login
+   sudo apt-get update
+   sudo apt-get install jq
    ```
-Esto asegurará que tu sesión esté autenticada correctamente con tu cuenta de Google Cloud.
 
+   **En sistemas RHEL/CentOS**:
+   ```bash
+   sudo yum install jq
+   ```
 
+   **En sistemas Fedora**:
+   ```bash
+   sudo dnf install jq
+   ```
+
+   Además, necesitarás las herramientas de Google Cloud SDK (`gcloud`) instaladas y configuradas en tu VM para poder gestionar las reglas de firewall. Si aún no tienes Google Cloud SDK, puedes instalarlo siguiendo las instrucciones de la [documentación oficial](https://cloud.google.com/sdk/docs/install).
+
+---
 
 ## Configuración del Script
 
@@ -61,7 +89,9 @@ Una vez que hayas asignado permisos de ejecución al script, puedes ejecutarlo d
 ./Script.sh
 ```
 
-El script se ejecutará en segundo plano, monitorizando los puertos de los contenedores y creando las reglas de firewall necesarias. 
+El script se ejecutará en segundo plano, monitorizando los puertos de los contenedores y creando las reglas de firewall necesarias.
+
+---
 
 ## Notas Importantes
 
@@ -76,3 +106,7 @@ El script se ejecutará en segundo plano, monitorizando los puertos de los conte
     ```bash
     tail -f script_output.log
     ```
+
+- **Eliminación de reglas huérfanas**: El script ahora elimina automáticamente las reglas de firewall para puertos que ya no están siendo utilizados por contenedores activos, lo que evita la acumulación de reglas innecesarias.
+
+---
