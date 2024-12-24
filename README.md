@@ -10,6 +10,10 @@ Aquí tienes una versión actualizada del README con los detalles que mencionas,
 
 ---
 
+Aquí tienes el README actualizado con toda la información que hemos cubierto:
+
+---
+
 # Script.sh
 
 Este script tiene como objetivo principal crear una regla de firewall para cada puerto generado por el contenedor del reto. La imagen diseñada para el reto genera puertos dinámicos a medida que el contenedor se levanta, y el script asegura que una regla de firewall se cree para permitir el acceso del competidor a cada puerto asignado por el contenedor.
@@ -22,12 +26,13 @@ El script identifica los puertos que el contenedor expone y, para cada uno de el
 
 1. **Gestión de puertos dinámicos**: El script detecta puertos dinámicos generados por el contenedor y crea reglas de firewall para ellos.
 2. **Eliminación de reglas huérfanas**: Si un contenedor se detiene o elimina, el script también elimina las reglas de firewall correspondientes para los puertos que ya no están siendo utilizados.
+3. **Ignorar el puerto 4444**: El script ahora ignora el puerto 4444 por defecto, evitando que se cree o se elimine una regla de firewall para dicho puerto.
 
 ## Áreas de Mejora y Puntos Pendientes
 
 Es importante señalar que aún existen algunos detalles pendientes por mejorar en el script:
 
-1. **Gestión de puertos por defecto**: Actualmente, el script levanta una regla de firewall para el puerto por defecto (4444). Aunque ya gestiona los puertos dinámicos, es importante que ignore este puerto por defecto en futuras versiones.
+1. **Gestión de puertos por defecto**: Aunque ahora se ignora el puerto 4444, algunas versiones futuras pueden añadir más control sobre los puertos predeterminados.
 2. **Reglas de firewall persistentes**: El script actualmente elimina las reglas de firewall solo cuando un contenedor asociado se elimina. Este comportamiento será más robusto en versiones futuras para asegurarse de que las reglas huérfanas no permanezcan.
 
 ---
@@ -93,6 +98,36 @@ El script se ejecutará en segundo plano, monitorizando los puertos de los conte
 
 ---
 
+## Cómo ejecutar el script en segundo plano
+
+Para ejecutar el script en segundo plano y asegurarte de que siga funcionando incluso si cierras la sesión, puedes usar el siguiente comando:
+
+```bash
+nohup ./Script.sh &> script_output.log &
+```
+
+Este comando redirige la salida estándar a un archivo `script_output.log`, y el proceso continuará ejecutándose en segundo plano.
+
+---
+
+## Ver el estado del script
+
+Si deseas verificar el estado del script mientras está ejecutándose, puedes usar el siguiente comando para ver la salida en tiempo real:
+
+```bash
+tail -f script_output.log
+```
+
+Además, si quieres asegurarte de que el script está corriendo en segundo plano, puedes buscar el proceso ejecutándose con el comando `ps`:
+
+```bash
+ps aux | grep Script.sh
+```
+
+Esto te mostrará si el script está en ejecución y su ID de proceso.
+
+---
+
 ## Notas Importantes
 
 - **Permisos de Google Cloud**: Asegúrate de tener acceso a los roles de propietario del proyecto y Administrador de Red de Compute en el proyecto de Google Cloud donde deseas ejecutar el script.
@@ -106,7 +141,5 @@ El script se ejecutará en segundo plano, monitorizando los puertos de los conte
     ```bash
     tail -f script_output.log
     ```
-
-- **Eliminación de reglas huérfanas**: El script ahora elimina automáticamente las reglas de firewall para puertos que ya no están siendo utilizados por contenedores activos, lo que evita la acumulación de reglas innecesarias.
 
 ---
