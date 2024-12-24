@@ -67,7 +67,13 @@ Si no estás familiarizado con los permisos en Google Cloud, te recomendamos lee
    ```bash
    sudo dnf install jq
    ```
+4. **Iniciar sesion en la VM**
 
+   Si estás utilizando gcloud directamente en la VM, asegúrate de que has iniciado sesión correctamente con los permisos adecuados.
+   gcloud auth login
+  ```bash
+gcloud auth login
+  ```
    Además, necesitarás las herramientas de Google Cloud SDK (`gcloud`) instaladas y configuradas en tu VM para poder gestionar las reglas de firewall. Si aún no tienes Google Cloud SDK, puedes instalarlo siguiendo las instrucciones de la [documentación oficial](https://cloud.google.com/sdk/docs/install).
 
 ---
