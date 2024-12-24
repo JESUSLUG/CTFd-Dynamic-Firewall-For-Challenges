@@ -35,6 +35,13 @@ Para usar este script, es necesario contar con los siguientes permisos:
    - Este rol es necesario para gestionar las reglas de firewall dentro del proyecto.
 
    Si no estás familiarizado con los permisos en Google Cloud, te recomendamos leer la documentación sobre [IAM (Identity and Access Management)](https://cloud.google.com/iam) para comprender cómo asignar estos roles y permisos.
+3. **Logeate en la VM, si es que es necesario.**
+   ```bash
+   gcloud auth login
+   ```
+Esto asegurará que tu sesión esté autenticada correctamente con tu cuenta de Google Cloud.
+
+
 
 ## Configuración del Script
 
