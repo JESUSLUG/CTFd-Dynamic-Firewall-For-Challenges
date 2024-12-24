@@ -10,10 +10,6 @@ Aquí tienes una versión actualizada del README con los detalles que mencionas,
 
 ---
 
-Aquí tienes el README actualizado con toda la información que hemos cubierto:
-
----
-
 # Script.sh
 
 Este script tiene como objetivo principal crear una regla de firewall para cada puerto generado por el contenedor del reto. La imagen diseñada para el reto genera puertos dinámicos a medida que el contenedor se levanta, y el script asegura que una regla de firewall se cree para permitir el acceso del competidor a cada puerto asignado por el contenedor.
