@@ -18,7 +18,7 @@ El script identifica los puertos que el contenedor expone y, para cada uno de el
 
 Es importante señalar que aún existen algunos detalles pendientes por mejorar en el script:
 
-Gestión de puertos por defecto: Actualmente, el script levanta una regla de firewall para el puerto por defecto (4444), pero aún no gestiona correctamente otros puertos generados dinámicamente, lo que se ajustará en futuras versiones.
+Gestión de puertos por defecto: Actualmente, el script levanta una regla de firewall para el puerto por defecto (4444), aun que ya gestiona los puertos es importante que ignore el puerto defualt del contenedor, lo que se ajustará en futuras versiones.
 Reglas de firewall persistentes: El script no elimina automáticamente las reglas de firewall cuando un contenedor asociado muere. Esta es otra área que se encuentra en desarrollo, y se implementará en una versión futura del script para asegurar que las reglas de firewall no queden huérfanas de contenedores activos.
 
 
