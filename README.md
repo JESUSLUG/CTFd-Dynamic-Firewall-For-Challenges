@@ -1,12 +1,30 @@
-# CTFd-and-Container
-This repository uses the plugin developed by TheFlash2k, their CTFd plugin. In this repository, we aim to provide a solution to the CGP firewall rules using a script that leverages its API.
+# CTFd-Dynamic-Firewall-For-Challenges (CGP)
 
-For the less attentive, the purpose of this repository is to work on and explain how to achieve this. Basically, what we want to do is enable competitors to deploy their own challenge (in the form of a container) during the competition, ensuring each participant has their own instance. This approach is similar to how HTB labs work.
+Este repositorio tiene como objetivo facilitar la implementación de la plataforma **CTFd** junto con el plugin de **TheFlash2k**, llamado "CTFd Docker Containers Plugin".  
 
-Attached is the link to TheFlash2k's repository: [https://github.com/TheFlash2k/containers](https://github.com/TheFlash2k/containers).
+## Problemática
 
-And of course, here is the link to the CTFd repository as well: [https://github.com/CTFd/CTFd](https://github.com/CTFd/CTFd).
-Aquí tienes una versión actualizada del README con los detalles que mencionas, incluyendo los requisitos de instalación para que el script funcione sin problemas:
+El problema principal radica en que este plugin no está diseñado para integrarse fácilmente con plataformas en la nube. Cuando se levanta un reto desde un contenedor Docker, el usuario no puede acceder a este debido a las reglas de firewall del servicio en la nube.  
+
+## Solución
+
+Con este repositorio, se busca proporcionar una guía rápida para:  
+1. Instalar **CTFd** junto con el plugin mencionado.  
+2. Incluir un script que funcione dentro de máquinas virtuales (VMs) de **Google Cloud Platform** (GCP).  
+
+El propósito del script es gestionar dinámicamente las reglas de firewall según los contenedores creados por el plugin.  
+
+### Funcionamiento del Script
+
+- El plugin "CTFd Docker Containers Plugin" genera nuevos contenedores basados en un contenedor original y asigna un puerto aleatorio, manteniendo el mismo nombre que el contenedor base.  
+- El script monitorea los contenedores creados, ignorando el contenedor original y sus puertos.  
+- Cuando se detecta un nuevo contenedor (basado del ya existente), el script crea automáticamente una regla de firewall en GCP para permitir el acceso al puerto asignado.  
+- Asimismo, al detectar que un contenedor ha dejado de funcionar, el script elimina la regla de firewall correspondiente para mantener la seguridad de la plataforma.  
+
+
+El repo de TheFlash2k: [https://github.com/TheFlash2k/containers](https://github.com/TheFlash2k/containers).
+
+El repo oficinal de CTFd: [https://github.com/CTFd/CTFd](https://github.com/CTFd/CTFd).
 
 ---
 
