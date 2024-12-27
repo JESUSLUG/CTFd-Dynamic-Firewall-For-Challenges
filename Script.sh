@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Nombre del contenedor y proyecto
+# Nombre del contenedor y proyecto, cambiar este por el de contenedor de tu reto
 CONTAINER_NAME="catacumbasdeldev-easy_web:latest"
 PROJECT_ID="planar-ripsaw-438815-n6"
 
@@ -13,7 +13,7 @@ while true; do
     else
         # Para cada puerto detectado, verifica si existe la regla de firewall
         for CONTAINER_PORT in $CONTAINER_PORTS; do
-            # Ignorar el puerto 4444
+            # Ignorar el puerto 4444 (Cambiar el puerto por el que hayas usado para levantar tu reto de manera) 
             if [[ "$CONTAINER_PORT" == "4444" ]]; then
                 echo "Ignorando el puerto 4444."
                 continue
