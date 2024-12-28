@@ -28,10 +28,6 @@ El repo oficinal de CTFd: [https://github.com/CTFd/CTFd](https://github.com/CTFd
 
 ---
 
-Aquí tienes el texto corregido y mejorado para tener más coherencia y claridad sobre el tema:
-
----
-
 # Conectar el Docker Daemon desde otra VM con el Plugin
 
 La documentación del plugin de **TheFlash2k** menciona que no tiene mucha información sobre cómo conectar el plugin a contenedores en otro equipo. En nuestro caso, la situación es un poco diferente. Inicialmente, se había considerado usar una máquina virtual (VM) separada tanto para los retos como para **CTFd**, tal como se menciona en la documentación de **TheFlash2k**. Sin embargo, debido a problemas de rendimiento, se decidió que los retos y la plataforma **CTFd** trabajaran en máquinas virtuales separadas.
