@@ -28,6 +28,55 @@ El repo oficinal de CTFd: [https://github.com/CTFd/CTFd](https://github.com/CTFd
 
 ---
 
+Aquí tienes el texto corregido y mejorado para tener más coherencia y claridad sobre el tema:
+
+---
+
+# Conectar el Docker Daemon desde otra VM con el Plugin
+
+La documentación del plugin de **TheFlash2k** menciona que no tiene mucha información sobre cómo conectar el plugin a contenedores en otro equipo. En nuestro caso, la situación es un poco diferente. Inicialmente, se había considerado usar una máquina virtual (VM) separada tanto para los retos como para **CTFd**, tal como se menciona en la documentación de **TheFlash2k**. Sin embargo, debido a problemas de rendimiento, se decidió que los retos y la plataforma **CTFd** trabajaran en máquinas virtuales separadas.
+
+Para lograr que el plugin pueda conectarse a los contenedores del Docker Daemon en una VM diferente, vamos a realizar las siguientes modificaciones:
+
+### Modificaciones necesarias en la VM de los retos:
+1. **Configurar el Docker Daemon para escuchar en una interfaz de red específica**: 
+   Es necesario exponer el Docker Daemon tanto en su socket local (`unix:///var/run/docker.sock`) como a través de un puerto TCP en la IP local de la VM. En nuestro caso, utilizaremos la IP interna de la instancia en **GCP**.
+
+2. **Comando para exponer el Docker Daemon**:
+   Para hacerlo, ejecutamos el siguiente comando, que hará que el Daemon de Docker escuche en dos interfaces: la de `unix` y la de red (`tcp`):
+
+   ```bash
+   dockerd -H unix:///var/run/docker.sock -H tcp://10.224.0.2:2375 &
+   ```
+
+   > Aquí, `10.224.0.2` es un ejemplo de la IP interna de la VM. Debes reemplazarla por la IP correspondiente de tu entorno.
+
+3. **Verificar que el puerto esté accesible**:
+   Después de ejecutar el comando, asegúrate de que la VM de **CTFd** pueda conectarse al Docker Daemon a través del puerto `2375`. Puedes verificarlo ejecutando el siguiente comando en la VM de **CTFd**:
+
+   ```bash
+   nc -zv 0.0.0.0 2375
+   ```
+
+   Si todo está configurado correctamente, deberías ver un mensaje que indique que el puerto está abierto.
+
+4. **Configurar el plugin de contenedores en **CTFd**:
+   Finalmente, entra a la configuración del plugin de contenedor en **CTFd** y agrega la siguiente URL del Docker Daemon:
+
+   ```
+   tcp://0.0.0.0:2375
+   ```
+
+   Esto permitirá que el plugin se conecte al Docker Daemon expuesto en el puerto `2375`.
+
+---
+
+Con estos pasos, habrás logrado configurar correctamente la conexión entre el plugin de **TheFlash2k** y el Docker Daemon en una VM separada.
+  - AGREGAR IMAGENES DE GUIA PENDIENTE
+
+--- 
+
+
 # Script.sh
 
 Este script tiene como objetivo principal crear una regla de firewall para cada puerto generado por el contenedor del reto. La imagen diseñada para el reto genera puertos dinámicos a medida que el contenedor se levanta, y el script asegura que una regla de firewall se cree para permitir el acceso del competidor a cada puerto asignado por el contenedor.
